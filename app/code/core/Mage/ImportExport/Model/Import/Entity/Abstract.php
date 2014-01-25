@@ -544,31 +544,38 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
      */
     public function isAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum)
     {
+        $message = '';
         switch ($attrParams['type']) {
             case 'varchar':
                 $val   = Mage::helper('core/string')->cleanString($rowData[$attrCode]);
                 $valid = Mage::helper('core/string')->strlen($val) < self::DB_MAX_VARCHAR_LENGTH;
+                $message = Mage::helper('importexport')->__('String is too long, only ' . self::DB_MAX_VARCHAR_LENGTH . ' characters allowed.');
                 break;
             case 'decimal':
                 $val   = trim($rowData[$attrCode]);
                 $valid = (float)$val == $val;
+                $message = Mage::helper('importexport')->__('Decimal value expected.');
                 break;
             case 'select':
             case 'multiselect':
                 $valid = isset($attrParams['options'][strtolower($rowData[$attrCode])]);
+                $message = Mage::helper('importexport')->__('Possible options are: ' . implode(', ', array_keys($attrParams['options'])));
                 break;
             case 'int':
                 $val   = trim($rowData[$attrCode]);
                 $valid = (int)$val == $val;
+                $message = Mage::helper('importexport')->__('Integer value expected.');
                 break;
             case 'datetime':
                 $val   = trim($rowData[$attrCode]);
                 $valid = strtotime($val) !== false
                     || preg_match('/^\d{2}.\d{2}.\d{2,4}(?:\s+\d{1,2}.\d{1,2}(?:.\d{1,2})?)?$/', $val);
+                $message = Mage::helper('importexport')->__('Datetime value expected.');
                 break;
             case 'text':
                 $val   = Mage::helper('core/string')->cleanString($rowData[$attrCode]);
                 $valid = Mage::helper('core/string')->strlen($val) < self::DB_MAX_TEXT_LENGTH;
+                $message = Mage::helper('importexport')->__('String is too long, only ' . self::DB_MAX_TEXT_LENGTH . ' characters allowed.');
                 break;
             default:
                 $valid = true;
@@ -576,7 +583,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
         }
 
         if (!$valid) {
-            $this->addRowError(Mage::helper('importexport')->__("Invalid value for '%s'"), $rowNum, $attrCode);
+            $this->addRowError(Mage::helper('importexport')->__("Invalid value for '%s'") . '. ' . $message, $rowNum, $attrCode);
         } elseif (!empty($attrParams['is_unique'])) {
             if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])) {
                 $this->addRowError(Mage::helper('importexport')->__("Duplicate Unique Attribute for '%s'"), $rowNum, $attrCode);
