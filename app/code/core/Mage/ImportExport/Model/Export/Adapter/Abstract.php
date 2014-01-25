@@ -51,10 +51,9 @@ abstract class Mage_ImportExport_Model_Export_Adapter_Abstract
      * Adapter object constructor.
      *
      * @param string $destination OPTIONAL Destination file path.
-     * @throws Exception
-     * @return void
+     * @throws Mage_Core_Exception
      */
-    final public function __construct($destination = null)
+    public function __construct($destination = null)
     {
         if (!$destination) {
             $destination = tempnam(sys_get_temp_dir(), 'importexport_');

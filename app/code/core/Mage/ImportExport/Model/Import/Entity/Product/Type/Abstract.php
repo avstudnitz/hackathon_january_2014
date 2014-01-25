@@ -96,9 +96,9 @@ abstract class Mage_ImportExport_Model_Import_Entity_Product_Type_Abstract
      * Object constructor.
      *
      * @param array $params
-     * @throws Exception
+     * @throws Mage_Core_Exception
      */
-    final public function __construct(array $params)
+    public function __construct(array $params)
     {
         if ($this->isSuitable()) {
             if (!isset($params[0]) || !isset($params[1])
