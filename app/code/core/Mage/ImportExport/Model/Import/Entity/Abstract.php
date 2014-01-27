@@ -549,7 +549,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
             case 'varchar':
                 $val   = Mage::helper('core/string')->cleanString($rowData[$attrCode]);
                 $valid = Mage::helper('core/string')->strlen($val) < self::DB_MAX_VARCHAR_LENGTH;
-                $message = Mage::helper('importexport')->__('String is too long, only ' . self::DB_MAX_VARCHAR_LENGTH . ' characters allowed.');
+                $message = Mage::helper('importexport')->__('String is too long, only %s characters allowed.', self::DB_MAX_VARCHAR_LENGTH);
                 break;
             case 'decimal':
                 $val   = trim($rowData[$attrCode]);
@@ -559,7 +559,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
             case 'select':
             case 'multiselect':
                 $valid = isset($attrParams['options'][strtolower($rowData[$attrCode])]);
-                $message = Mage::helper('importexport')->__('Possible options are: ' . implode(', ', array_keys($attrParams['options'])));
+                $message = Mage::helper('importexport')->__('Possible options are: %s', implode(', ', array_keys($attrParams['options'])));
                 break;
             case 'int':
                 $val   = trim($rowData[$attrCode]);
@@ -575,7 +575,7 @@ abstract class Mage_ImportExport_Model_Import_Entity_Abstract
             case 'text':
                 $val   = Mage::helper('core/string')->cleanString($rowData[$attrCode]);
                 $valid = Mage::helper('core/string')->strlen($val) < self::DB_MAX_TEXT_LENGTH;
-                $message = Mage::helper('importexport')->__('String is too long, only ' . self::DB_MAX_TEXT_LENGTH . ' characters allowed.');
+                $message = Mage::helper('importexport')->__('String is too long, only %s characters allowed.', self::DB_MAX_TEXT_LENGTH);
                 break;
             default:
                 $valid = true;
